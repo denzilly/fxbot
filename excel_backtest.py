@@ -6,6 +6,7 @@ import random
 from datetime import datetime
 import time
 
+
 class Portfolio:
 
     def __init__(self, base_value, hold_value, hold_currency, log):
@@ -61,7 +62,7 @@ for index, row in islice(df_btest.iterrows(), 370000):
 
         else:
             mywallet.buy(mywallet.base_value, row['O'])
-ff
+
 
 for x in mywallet.log:
     print(f"{x[1]} AT {x[2]}, NEW PORTFOLIO VALUE IS {x[3]} EUR")

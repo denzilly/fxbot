@@ -1,44 +1,43 @@
-import json
-import requests
-from bs4 import BeautifulSoup
-from datetime import datetime
-from datetime import timedelta
-import time
-
 import os
+import pandas as pd
+import numpy as np
+from itertools import islice
+import random
+from datetime import datetime
+from get_quote import get_quote
+
+
+class Portfolio:
+
+    def __init__(self, base_value, hold_value, hold_currency, log):
+        self.base_value = base_value
+        self.hold_value = hold_value
+        self.hold_currency = hold_currency
+        self.log = log
+
+    def buy(self, base_value, rate):
+        #Buy EUR / Sell USD
+        self.base_value = self.hold_value / rate
+        self.hold_value = self.base_value
+        self.hold_currency = "EUR"
+        self.log.append([datetime.now(), "BUY EUR", rate, self.base_value])
+        print(f"you bought EUR at {rate}, you are now LONG EUR with a portfolio value of {self.base_value} EUR")
+        print(f"basevalue is now {self.base_value} EUR")
+        print(f"holdvalue is now {self.hold_value} EUR")
+
+
+
+    def sell(self, base_value, rate):
+        #Sell EUR / Buy USD
+        self.base_value = self.base_value
+        self.hold_value = self.base_value * rate
+        self.hold_currency = "USD"
+        self.log.append([datetime.now(), "SELL EUR", rate, self.base_value])
+        print(f"you sold EUR at {rate}, you are now SHORT EUR with a portfolio value of {self.base_value} EUR")
+        print(f"basevalue is now {self.base_value} EUR")
+        print(f"holdvalue is now {self.hold_value} USD")
 
 
 
 
-
-
-
-
-
-
-
-
-
-def get_quote(seconds):
-    now = datetime.now()
-
-
-
-
-    while datetime.now() <= now + timedelta(seconds=seconds):
-        URL = "https://webrates.truefx.com/rates/connect.html?f=html"
-        page = requests.get(URL)
-        soup = BeautifulSoup(page.content, 'html.parser')
-
-        el = soup.find_all('td')
-        rate = el[2].text + el[3].text
-        print(f"[{datetime.now()}]  ---  Pair {el[0].text} is trading at {el[2].text + el[3].text}")
-        time.sleep(1)
-
-
-
-
-get_quote(100)
-
-
-
+mywallet = Portfolio(100000, 100000, "EUR", [])
